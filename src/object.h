@@ -4,7 +4,27 @@
 typedef struct {
 	char icon;
 	int x, y;
+	int color;
 } OBJECT;
+
+typedef struct {
+	OBJECT *buff;
+	int maxx, maxy;
+} SCR;
+
+typedef struct {
+	int x, y;
+} SNOWFLAKE;
+
+typedef struct {
+	SNOWFLAKE *buff;
+	int total;
+} SNOW;
+
+typedef struct {
+	int level;
+	int ct;
+} GND;
 
 #endif
 

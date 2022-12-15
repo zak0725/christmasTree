@@ -9,8 +9,9 @@
 #include "object.h"
 #include "colors.h"
 #include "posit.h"
+#include "screen.h"
 
-void christTree(OBJECT *scr);
+void christTree(SCR *scr);
 
 #endif
 

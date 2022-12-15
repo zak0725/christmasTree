@@ -2,7 +2,7 @@ all: main
 
 FLAGS=-lpthread -g -Wall -lncurses
 
-main: main.c christ.o colors.o
+main: main.c christ.o colors.o screen.o flakes.o
 	gcc $^ -o $@ $(FLAGS)
 
 %.o: %.c
