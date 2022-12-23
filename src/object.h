@@ -21,10 +21,11 @@ typedef struct {
 	int total;
 } SNOW;
 
-typedef struct {
-	int level;
+typedef int GND;
+
+/*typedef struct {
 	int ct;
-} GND;
+} GND;*/
 
 #endif
 

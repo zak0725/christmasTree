@@ -12,14 +12,16 @@
 #include "screen.h" // Screen functions, scrch etc.
 #include "flakes.h"
 
-const char merry[20] = "Merry Chistmas";
+
+const char merry[16] = "Merry Christmas";
+
+const int out = 200;
+char ch = 0;
 
 int main(void)
 {
 	initscr();
-#ifndef DEBUG
 	curs_set(0);
-#endif
 
 	// Variables
 	int i;   // variable use for loops
@@ -36,7 +38,7 @@ int main(void)
 	snow.total = FLK_TOT;
 	snow.buff = (SNOWFLAKE *) malloc(FLK_TOT * sizeof(SNOWFLAKE *));
 
-	GND *ground = (GND *) calloc(COLS, sizeof(GND));
+	int *ground = (int *) calloc(COLS, sizeof(int));
 
 	int strx = (getmaxx(stdscr) - length) / 2;
 
@@ -51,8 +53,7 @@ int main(void)
 		scrch(&scr, i, LINER, '_', COLOR_PAIR(GNDCOL));
 	
 	srand(time(NULL));
-	while (1) {
-		usleep(200000);
+	while (ch != 'q') {
 		if (!flag && strx > 0) {
 			strx--;
 			scrch(&scr, strx + length, LINER, '_', COLOR_PAIR(GREEN));
@@ -77,6 +78,8 @@ int main(void)
 		mvaddstr(LINER, strx, merry);
 		attroff(COLOR_PAIR(RED) | A_BOLD);
 		refresh();
+		timeout(out);
+		ch = getch();
 	}
 	endwin();
 	free(scr.buff);

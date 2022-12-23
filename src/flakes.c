@@ -25,12 +25,11 @@ int flake_move(SCR *scr, GND *gnd, SNOW *flakes)
 
 		if (flakes -> buff[i].y < LINER - 1)
 			flakes -> buff[i].y++; // Move the flake down, if it hasn't reached the bottem
-		else { // If it reached the bottem, reset the position and pile it on the ground
-			gnd[flakes -> buff[i].x].ct++;
-			if (gnd[flakes -> buff[i].x].ct == 2 && gnd[flakes -> buff[i].x].level < 1) {
-				gnd[flakes -> buff[i].x].ct = 0;
-				gnd[flakes -> buff[i].x].level++;
-				scrch(scr, flakes -> buff[i].x, LINER - gnd[flakes -> buff[i].x].level + 1, '*', COLR(WHITE));
+		else {
+			gnd[flakes -> buff[i].x]++;
+			if (gnd[flakes -> buff[i].x] == 4) { // if there is 4 flakes on this place, add a snow drift
+				gnd[flakes -> buff[i].x] = 0;
+				scrch(scr, flakes -> buff[i].x, LINER, '*', COLR(WHITE));
 			}
 			flakes -> buff[i].y = -1;
 			flakes -> buff[i].x = rand() % scr -> maxx;
