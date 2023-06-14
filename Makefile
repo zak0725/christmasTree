@@ -1,8 +1,6 @@
-all: main
-
 FLAGS=-g -Wall -lncurses
 
-main: main.c christ.o colors.o flakes.o
+christmas: src/main.c src/christ.o src/colors.o src/flakes.o
 	gcc $^ -o $@ $(FLAGS)
 
 %.o: %.c

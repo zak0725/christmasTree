@@ -5,4 +5,4 @@
 *.dSYM
 
 # The executable
-src/christmas
+christmas
