@@ -9,14 +9,9 @@
 #include "christ.h"  // Show up the Christmas Tree!!!
 #include "posit.h"   // Defined positions needed
 #include "object.h" // Defined types
-#include "screen.h" // Screen functions, scrch etc.
 #include "flakes.h"
 
-
-const char merry[16] = "Merry Christmas";
-
-const int out = 200;
-char ch = 0;
+const char merry[20] = "Merry Christmas";
 
 int main(void)
 {
@@ -28,61 +23,51 @@ int main(void)
 	int flag = 0;
 	const int length = strlen(merry);
 
-	SCR scr;
-
-	scr.maxx = COLS;
-	scr.maxy = LINES;
-	scr.buff = (OBJECT *) calloc(LINES, COLS * sizeof(OBJECT));
-
 	SNOW snow;
 	snow.total = FLK_TOT;
-	snow.buff = (SNOWFLAKE *) malloc(FLK_TOT * sizeof(SNOWFLAKE *));
+	snow.buff = (SNOWFLAKE *) malloc(FLK_TOT * sizeof(SNOWFLAKE));
 
-	int *ground = (int *) calloc(COLS, sizeof(int));
-
-	int strx = (getmaxx(stdscr) - length) / 2;
+	int strx = (COLS - length) / 2;
 
 	// Colors
 	init_colors();
 	// Snowflakes
-	flake_init(scr, &snow);
+	flake_init(&snow);
 
-	christTree(&scr);
+	christTree();
 
 	for (i = 0; i < COLS; i++)
-		scrch(&scr, i, LINER, '_', COLOR_PAIR(GNDCOL));
+		mvaddch(LINER, i, '_' | COLOR_PAIR(GNDCOL));
+	refresh();
 	
 	srand(time(NULL));
-	while (ch != 'q') {
+	timeout(200);
+	while (getch() != 'q') {
 		if (!flag && strx > 0) {
 			strx--;
-			scrch(&scr, strx + length, LINER, '_', COLOR_PAIR(GREEN));
+			mvaddch(LINER, strx + length, '_' | COLOR_PAIR(GREEN));
 		}
 		else if (!flag && strx == 0) {
 			flag = 1;
-			scrch(&scr, 0, LINER, '_', COLOR_PAIR(GREEN));
+			mvaddch(LINER, 0, '_' | COLOR_PAIR(GREEN));
 			strx++;
 		} else if (flag && COLS - strx > length) {
-			scrch(&scr, strx, LINER, '_', COLOR_PAIR(GREEN));
+			mvaddch(LINER, strx, '_' | COLOR_PAIR(GREEN));
 			strx++;
 		}
 		else if (flag && COLS - strx == length) {
 			flag = 0;
 			strx--;
-			scrch(&scr, strx + length, LINER, '_', COLOR_PAIR(GREEN));
+			mvaddch(LINER, strx + length, '_' | COLOR_PAIR(GREEN));
 		}
-		flake_move(&scr, ground, &snow);
+		flake_move(&snow);
 
-		printscr(scr);
 		attron(COLOR_PAIR(RED) | A_BOLD);
 		mvaddstr(LINER, strx, merry);
-		attroff(COLOR_PAIR(RED) | A_BOLD);
 		refresh();
-		timeout(out);
-		ch = getch();
+		attroff(COLOR_PAIR(RED) | A_BOLD);
 	}
 	endwin();
-	free(scr.buff);
 	return 0;
 }
 

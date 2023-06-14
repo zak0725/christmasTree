@@ -6,8 +6,8 @@
 #define CHARY LINER
 
 #define TREE_START 1
-#define STAR_A (COLS / 2 - 1)
-#define STAR_B (COLS / 2)
+#define STAR_A ((COLS - 1) / 2)
+#define STAR_B (STAR_A + 1)
 
 #endif
 

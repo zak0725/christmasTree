@@ -14,18 +14,13 @@ typedef struct {
 
 typedef struct {
 	int x, y;
+	_Bool cover;
 } SNOWFLAKE;
 
 typedef struct {
 	SNOWFLAKE *buff;
 	int total;
 } SNOW;
-
-typedef int GND;
-
-/*typedef struct {
-	int ct;
-} GND;*/
 
 #endif
 
