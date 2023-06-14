@@ -1,8 +1,9 @@
 #include "christ.h"
+#include <signal.h>
 
-void christTree(SCR *scr)
+void christTree(void)
 {
-	int x = COLS / 2 - 1;
+	int x = STAR_A;
 	int y = TREE_START;
 	int seg = 2, lseg = y + 1;
 	int space = 0, i;
@@ -10,13 +11,12 @@ void christTree(SCR *scr)
 	int color = COLR(GREEN);
 	char ch = 0;
 
-	scrch(scr, x, y, '*', A_BOLD | COLR(YELLOW));
-	scrch(scr, x + 1, y, '*', A_BOLD | COLR(YELLOW));
-	refresh();
+	mvaddch(y, x, '*' | A_BOLD | COLOR_PAIR(YELLOW));
+	addch('*' | A_BOLD | COLR(YELLOW));
 	for (y = y + 1; y < LINER; y++, x--, space += 2) {
 		if (y - lseg == seg - 1 && seg) {
 			ch = '_';
-			scrch(scr, x, y, '0', A_BOLD | A_BLINK | COLR(BULBCOL));
+			mvaddch(y, x, '0' | A_BOLD | A_BLINK | COLR(BULBCOL));
 
 			for (i = 1; i <= space; i++) {
 				ch = '_';
@@ -33,13 +33,11 @@ void christTree(SCR *scr)
 					pres = 1;
 				}
 
-				scrch(scr, x + i, y, ch, color);
+				addch(ch | color);
 				color = COLR(GREEN);
-				refresh();
 			}
 
-			scrch(scr, x + 1 + space, y, '0', COLR(BULBCOL) | A_BOLD | A_BLINK);
-			refresh();
+			mvaddch(y, x + 1 + space, '0' | COLR(BULBCOL) | A_BOLD | A_BLINK);
 			seg++;
 			lseg = y + 1;
 			x += 2;
@@ -48,26 +46,51 @@ void christTree(SCR *scr)
 			pres = 0;
 			continue;
 		}
-		scrch(scr, x, y, '/', A_BOLD | COLR(GREEN));
+		mvaddch(y, x, '/' | A_BOLD | COLR(GREEN));
 
 		for (i = 1; i <= space; i++) {
 			num = rand() % 3;
 			if (!num && !bulb) {
 				ch = '0';
-				scrch(scr, x + i, y, ch, COLR(YELLOW) | A_BLINK | A_BOLD);
-				refresh();
+				mvaddch(y, x + i, ch | COLR(YELLOW) | A_BLINK | A_BOLD);
 				bulb = 1;
 			} if (num == 2 && bulb) {
 				ch = '+';
-				scrch(scr, x + i, y, ch, COLR(RED) | A_BOLD);
+				mvaddch(y, x + i, ch | COLR(RED) | A_BOLD);
 				bulb = 0;
 				pres = 1;
 				break;
 			}
 		}
 
-		scrch(scr, x + 1 + space, y, '\\', COLR(GREEN));
-		refresh();
+		mvaddch(y, x + 1 + space, '\\' | COLR(GREEN));
 	}
+	refresh();
+}
+
+int find_sol(int line, int *stat)
+{
+	int i, cnt = 2, seg = TREE_START + cnt, start = STAR_A;
+
+	*stat = 0;
+
+	if (line < 0) return -1;
+
+	if (line == 0) {
+		*stat = 0;
+		return STAR_A;
+	}
+
+	for (i = 1; i < line; i++, start--) {
+		if (i + 1 == seg)
+			*stat = 1;
+		if (i == seg) {
+			cnt++;
+			seg += cnt;
+			start += 2;
+		}
+	}
+	
+	return start;
 }
 

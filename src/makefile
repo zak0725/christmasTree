@@ -1,13 +1,13 @@
-all: christmas
+all: main
 
 FLAGS=-g -Wall -lncurses
 
-christmas: main.c christ.o colors.o screen.o flakes.o
+main: main.c christ.o colors.o flakes.o
 	gcc $^ -o $@ $(FLAGS)
 
 %.o: %.c
 	gcc -o $@ -c $< $(FLAGS)
 
 clean:
-	rm *.o christmas
+	rm *.o main
 

@@ -9,9 +9,9 @@
 #include "object.h"
 #include "colors.h"
 #include "posit.h"
-#include "screen.h"
 
-void christTree(SCR *scr);
+void christTree(void);
+int find_sol(int line, int *stat);
 
 #endif
 

@@ -10,7 +10,6 @@
 #define YELLOW 3
 #define RED 4
 #define WHITE 5
-#define B_A_W 6
 
 #define CHARCOL CYAN
 #define GNDCOL GREEN 
