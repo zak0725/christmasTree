@@ -7,5 +7,5 @@ christmas: src/main.c src/christ.o src/colors.o src/flakes.o
 	gcc -o $@ -c $< $(FLAGS)
 
 clean:
-	rm *.o main
+	-rm -r src/*.o christmas*
 
