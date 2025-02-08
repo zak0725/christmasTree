@@ -6,7 +6,6 @@
 #include <stdlib.h>
 
 // Local headers
-#include "object.h"
 #include "colors.h"
 #include "posit.h"
 

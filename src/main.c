@@ -8,10 +8,11 @@
 #include "colors.h"  // Defined color pair numbers
 #include "christ.h"  // Show up the Christmas Tree!!!
 #include "posit.h"   // Defined positions needed
-#include "object.h" // Defined types
 #include "flakes.h"
 
 const char merry[20] = "Merry Christmas";
+
+SNOW snow;
 
 int main(void)
 {
@@ -19,11 +20,9 @@ int main(void)
 	curs_set(0);
 
 	// Variables
-	int i;   // variable use for loops
-	int flag = 0;
+	int dir = 0; // The direction of `merry`
 	const int length = strlen(merry);
 
-	SNOW snow;
 	snow.total = FLK_TOT;
 	snow.buff = (SNOWFLAKE *) malloc(FLK_TOT * sizeof(SNOWFLAKE));
 
@@ -36,27 +35,25 @@ int main(void)
 
 	christTree();
 
-	for (i = 0; i < COLS; i++)
+	for (int i = 0; i < COLS; i++)
 		mvaddch(LINER, i, '_' | COLOR_PAIR(GNDCOL));
 	refresh();
 	
 	srand(time(NULL));
 	timeout(200);
 	while (getch() != 'q') {
-		if (!flag && strx > 0) {
+		if (!dir && strx > 0) {
 			strx--;
 			mvaddch(LINER, strx + length, '_' | COLOR_PAIR(GREEN));
-		}
-		else if (!flag && strx == 0) {
-			flag = 1;
+		} else if (!dir && strx == 0) {
+			dir = 1;
 			mvaddch(LINER, 0, '_' | COLOR_PAIR(GREEN));
 			strx++;
-		} else if (flag && COLS - strx > length) {
+		} else if (dir && COLS - strx > length) {
 			mvaddch(LINER, strx, '_' | COLOR_PAIR(GREEN));
 			strx++;
-		}
-		else if (flag && COLS - strx == length) {
-			flag = 0;
+		} else if (dir && COLS - strx == length) {
+			dir = 0;
 			strx--;
 			mvaddch(LINER, strx + length, '_' | COLOR_PAIR(GREEN));
 		}

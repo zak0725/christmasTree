@@ -26,37 +26,35 @@ int flake_init(SNOW *flakes)
 
 int flake_move(SNOW *flakes)
 {
-	int i;
-
-	for (i = 0; i < flakes -> total; i++) {
-		if (!flakes -> buff[i].cover && flakes -> buff[i].y >= 0)
+	for (int i = 0; i < flakes -> total; i++) {
+		int x = flakes -> buff[i].x, y = flakes -> buff[i].y;
+		if (!cover(y, x) && y >= 0)
 			// Clear the flakes
-			mvaddch(flakes -> buff[i].y, flakes -> buff[i].x, ' ');
+			mvaddch(y, x, ' ');
 
 		// Move the flakes down
 		flakes -> buff[i].y++;
-		if (flakes -> buff[i].y >= LINER) {
+		y++;
+		if (y >= LINER) {
 			/* Increase the counter and check if we have enough show flakes to make a snowdrift */
-			snowdrift[flakes -> buff[i].x]++;
-			if (snowdrift[flakes -> buff[i].x] == SNOWDRIFT) {
+			snowdrift[x]++;
+			if (snowdrift[x] == SNOWDRIFT) {
 				/* if so, print the snowdrift and reset the counter */
-				mvaddch(LINER, flakes -> buff[i].x, '*');
-				snowdrift[flakes -> buff[i].x] = 0;
+				mvaddch(LINER, x, '*');
+				snowdrift[x] = 0;
 			}
 
 			/* Reset the positions, and `cover`*/
 			/* and goto the next flake         */
 			flakes -> buff[i].y = -1;
 			flakes -> buff[i].x = rand() % COLS;
-			flakes -> buff[i].cover = 0;
 
 			continue;
 		}
 
-		flakes -> buff[i].cover = cover(flakes -> buff[i].y, flakes -> buff[i].x);  // Update `cover`
-		if (!flakes -> buff[i].cover)
+		if (!cover(y, x))
 			// Print the flakes
-			mvaddch(flakes -> buff[i].y, flakes -> buff[i].x, '*');
+			mvaddch(y, x, '*');
 	}
 	refresh();
 	return 0;

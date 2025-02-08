@@ -3,65 +3,42 @@
 
 void christTree(void)
 {
-	int x = STAR_A;
-	int y = TREE_START;
-	int seg = 2, lseg = y + 1;
-	int space = 0, i;
-	int num, bulb = 0, pres = 0;
-	int color = COLR(GREEN);
-	char ch = 0;
+	int seg = 2, lseg = TREE_START + 1;
+	int space = 0;
 
-	mvaddch(y, x, '*' | A_BOLD | COLOR_PAIR(YELLOW));
+	mvaddch(TREE_START, STAR_A, '*' | A_BOLD | COLOR_PAIR(YELLOW));
 	addch('*' | A_BOLD | COLR(YELLOW));
-	for (y = y + 1; y < LINER; y++, x--, space += 2) {
+	for (int y = TREE_START + 1, x = STAR_A; y < LINER; y++, x--, space += 2) {
 		if (y - lseg == seg - 1 && seg) {
-			ch = '_';
 			mvaddch(y, x, '0' | A_BOLD | A_BLINK | COLR(BULBCOL));
 
-			for (i = 1; i <= space; i++) {
-				ch = '_';
-				num = rand() % 3;
-				
-				if (!num && !bulb) { // Generate a bulb
-					ch = '0';
-					bulb = 1;
-					color = COLR(YELLOW) | A_BOLD | A_BLINK;
-				} else if (num == 2 && bulb && !pres) { // Generate a present
-					ch = '+';
-					pres = 1;
-					color = COLR(RED) | A_BOLD;
-					pres = 1;
-				}
+			for (int i = 1; i <= space; i++)
+				addch('_' | COLR(GREEN));
 
-				addch(ch | color);
-				color = COLR(GREEN);
-			}
+			int bulbx = rand() % space + 1;
+			int presx;
+			do {
+				presx = rand() % space + 1;
+			} while (presx == bulbx);
+			mvaddch(y, x + bulbx, '0' | A_BOLD | A_BLINK | COLR(YELLOW));
+			mvaddch(y, x + presx, '+' | A_BOLD | COLR(RED));
 
 			mvaddch(y, x + 1 + space, '0' | COLR(BULBCOL) | A_BOLD | A_BLINK);
 			seg++;
 			lseg = y + 1;
 			x += 2;
 			space -= 4;
-			bulb = 0;
-			pres = 0;
 			continue;
 		}
 		mvaddch(y, x, '/' | A_BOLD | COLR(GREEN));
 
-		for (i = 1; i <= space; i++) {
-			num = rand() % 3;
-			if (!num && !bulb) {
-				ch = '0';
-				mvaddch(y, x + i, ch | COLR(YELLOW) | A_BLINK | A_BOLD);
-				bulb = 1;
-			} if (num == 2 && bulb) {
-				ch = '+';
-				mvaddch(y, x + i, ch | COLR(RED) | A_BOLD);
-				bulb = 0;
-				pres = 1;
-				break;
-			}
-		}
+		int bulbx = rand() % space + 1;
+		int presx;
+		do {
+			presx = rand() % space + 1;
+		} while (presx == bulbx);
+		mvaddch(y, x + bulbx, '0' | A_BOLD | A_BLINK | COLR(YELLOW));
+		mvaddch(y, x + presx, '+' | A_BOLD | COLR(RED));
 
 		mvaddch(y, x + 1 + space, '\\' | COLR(GREEN));
 	}

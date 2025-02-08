@@ -6,8 +6,17 @@
 #include <time.h>
 
 #include "christ.h"
-#include "object.h"
 #include "posit.h"
+
+typedef struct {
+	int x, y;
+} SNOWFLAKE;
+
+typedef struct {
+	SNOWFLAKE *buff;
+	int total;
+} SNOW;
+
 
 #define FLK_P_L 2
 #define FLK_TOT (FLK_P_L * LINES)
